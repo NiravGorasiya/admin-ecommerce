@@ -138,7 +138,7 @@ const Sidebar: React.FC = () => {
               } ${item.disabled ? "disabled" : ""}`}
             >
               <a
-                className="menu-link"
+                className="menu-link" style={{display:'flex'}}
                 href={item.disabled ? undefined : item.link}
                 onClick={(e) => {
                   if (item.disabled) e.preventDefault(); // Prevent click for disabled items
