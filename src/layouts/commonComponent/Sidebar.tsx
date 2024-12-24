@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 
 // Define types for menu items
 interface SubMenuItem {
@@ -130,6 +131,7 @@ const Sidebar: React.FC = () => {
       </div>
       <nav>
         <ul className="menu-aside">
+          <Link to="/category">Category</Link>
           {menuItems.map((item, index) => (
             <li
               key={index}
