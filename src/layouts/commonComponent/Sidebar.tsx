@@ -1,20 +1,20 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import Menu from "../Menu";
 
-// Define types for menu items
 interface SubMenuItem {
   title: string;
   link: string;
-  active?: boolean; // active is optional
+  active?: boolean; 
 }
 
 interface MenuItem {
   title: string;
   icon: string;
   link: string;
-  active?: boolean; // active is optional
+  active?: boolean; 
   disabled?: boolean;
-  submenu?: SubMenuItem[]; // Submenu is optional
+  submenu?: SubMenuItem[]; 
 }
 
 const Sidebar: React.FC = () => {
@@ -24,6 +24,12 @@ const Sidebar: React.FC = () => {
   // Define the menu items
   const menuItems: MenuItem[] = [
     { title: "Dashboard", icon: "home", link: "#", active: true },
+    {
+      title: "Category",
+      icon: "shopping_bag",
+      link: "/category",
+      active:true,
+    },
     {
       title: "Products",
       icon: "shopping_bag",
@@ -63,10 +69,7 @@ const Sidebar: React.FC = () => {
       icon: "add_box",
       link: "#",
       submenu: [
-        { title: "Add Product 1", link: "#" },
-        { title: "Add Product 2", link: "#" },
-        { title: "Add Product 3", link: "#" },
-        { title: "Add Product 4", link: "#" },
+        { title: "Add Product 1", link: "/product" }
       ],
     },
     {
@@ -74,9 +77,7 @@ const Sidebar: React.FC = () => {
       icon: "monetization_on",
       link: "#",
       submenu: [
-        { title: "Transaction 1", link: "#" },
-        { title: "Transaction 2", link: "#" },
-        { title: "Transaction Details", link: "#" },
+        { title: "Transaction 1", link: "/transaction" }
       ],
     },
     {
@@ -84,35 +85,26 @@ const Sidebar: React.FC = () => {
       icon: "person",
       link: "#",
       submenu: [
-        { title: "User Login", link: "#" },
-        { title: "User Registration", link: "#" },
+        { title: "User Login", link: "/login" },
+        { title: "User Registration", link: "/registration" },
         { title: "Error 404", link: "#" },
       ],
     },
-    { title: "Reviews", icon: "comment", link: "#" },
-    { title: "Brands", icon: "stars", link: "#" },
-    { title: "Statistics", icon: "pie_chart", link: "#", disabled: true },
+    { title: "Reviews", icon: "comment", link: "/review" },
+    { title: "Brands", icon: "stars", link: "/brands" },
+    { title: "Statistics", icon: "pie_chart", link: "/statistics", disabled: true },
     {
       title: "Settings",
       icon: "settings",
       link: "#",
       submenu: [
-        { title: "Setting Sample 1", link: "#" },
-        { title: "Setting Sample 2", link: "#" },
+        { title: "Setting Sample 1", link: "/settings" },
+        { title: "Setting Sample 2", link: "/setting" },
       ],
     },
     { title: "Starter Page", icon: "local_offer", link: "#" },
   ];
-
-  // Function to toggle the active submenu
-  const handleSubMenuToggle = (menuTitle: string) => {
-    if (activeSubMenu === menuTitle) {
-      setActiveSubMenu(null); // Deactivate the submenu if it's already open
-    } else {
-      setActiveSubMenu(menuTitle); // Set the clicked submenu as active
-    }
-  };
-
+  
   return (
     <aside className="navbar-aside sidebar-component" id="offcanvas_aside">
       <div className="aside-top">
@@ -129,48 +121,7 @@ const Sidebar: React.FC = () => {
           </button>
         </div>
       </div>
-      <nav>
-        <ul className="menu-aside">
-          <Link to="/category">Category</Link>
-          {menuItems.map((item, index) => (
-            <li
-              key={index}
-              className={`menu-item ${item.active ? "active" : ""} ${
-                item.submenu ? "has-submenu" : ""
-              } ${item.disabled ? "disabled" : ""}`}
-            >
-              <a
-                className="menu-link"
-                href={item.disabled ? undefined : item.link}
-                onClick={(e) => {
-                  if (item.disabled) e.preventDefault(); // Prevent click for disabled items
-                  else item.submenu && handleSubMenuToggle(item.title); // Toggle submenu on click
-                }}
-              >
-                <i className="icon material-icons">{item.icon}</i>
-                <span className="text">{item.title}</span>
-              </a>
-              {item.submenu && (
-                <div
-                  className={`submenu${
-                    activeSubMenu === item.title ? " active" : ""
-                  }`}
-                >
-                  {item.submenu.map((subItem, subIndex) => (
-                    <a
-                      key={subIndex}
-                      href={subItem.link}
-                      className={subItem.active ? "active" : ""}
-                    >
-                      {subItem.title}
-                    </a>
-                  ))}
-                </div>
-              )}
-            </li>
-          ))}
-        </ul>
-      </nav>
+      <Menu menuItems={menuItems} />;
     </aside>
   );
 };
