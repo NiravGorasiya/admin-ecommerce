@@ -156,10 +156,10 @@ const Category: React.FC = () => {
                     </Modal.Body>
                     <Modal.Footer>
                         <Button variant='secondary' onClick={handleButtonClick}>
-                            close
+                            Close
                         </Button>
                         <Button variant='secondary' onClick={handleSubmit}>
-                            save
+                            Save
                         </Button>
                     </Modal.Footer>
                 </Modal>

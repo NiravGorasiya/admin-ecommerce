@@ -1,19 +1,15 @@
 import React, { useState } from 'react';
-import { Nav, Dropdown } from "react-bootstrap";
-import { Link } from 'react-router-dom';
-
+import { Link, useLocation } from 'react-router-dom';
 
 interface SubMenuItem {
     title: string;
     link: string;
-    active?: boolean;
 }
 
 interface MenuItem {
     title: string;
     link?: string;
     icon: string;
-    active?: boolean;
     disabled?: boolean;
     submenu?: SubMenuItem[];
 }
@@ -24,6 +20,9 @@ interface MenuComponentProps {
 
 const Menu: React.FC<MenuComponentProps> = ({ menuItems }) => {
     const [activeSubMenu, setActiveSubMenu] = useState<string | null>(null);
+    const { pathname } = useLocation();
+
+    console.log(pathname, 'pathname');
 
     const handleSubMenuToggle = (menuTitle: string) => {
         if (activeSubMenu === menuTitle) {
@@ -33,44 +32,47 @@ const Menu: React.FC<MenuComponentProps> = ({ menuItems }) => {
         }
     };
     return (
-        <nav>
+        <nav className='items-center'>
             <ul className="menu-aside">
-                {menuItems.map((item, index) => (
-                    <li
-                        key={index}
-                        className={`menu-item ${item.active ? "active" : ""} ${item.submenu ? "has-submenu" : ""} ${item.disabled ? "disabled" : ""}`}
-                    >
-                        <Link
-                            className="menu-link"
-                            to={item.submenu ? '#' : item.disabled ? '#' : item.link || '#'}
-                            onClick={(e) => {
-                                if (item.disabled) e.preventDefault();
-                                else if (item.submenu) handleSubMenuToggle(item.title);
-                            }}
+                {menuItems.map((item, index) => {
+                    console.log(item, 'items');
+
+                    return (
+                        <li
+                            key={index}
+                            className={`menu-item ${item?.link === pathname ? "active" : ""}`}
                         >
-                            <i className="icon material-icons">{item.icon}</i>
-                            <span className="text">{item.title}</span>
-                        </Link>
-                        {item.submenu && (
-                            <div
-                                className={`submenu${activeSubMenu === item.title ? " active" : ""}`}
+                            <Link
+                                className="menu-link d-flex"
+                                to={item?.link? item.link:""}
+                                onClick={(e) => {
+                                    if (item.disabled) e.preventDefault();
+                                    else if (item.submenu) handleSubMenuToggle(item.title);
+                                }}
                             >
-                                {item.submenu.map((subItem, subIndex) => (
-                                    <Link
-                                        key={subIndex}
-                                        to={subItem.link}
-                                        className={subItem.active ? "active" : ""}
-                                    >
-                                        {subItem.title}
-                                    </Link>
-                                ))}
-                            </div>
-                        )}
-                    </li>
-                ))}
+                                <i className="icon material-icons">{item.icon}</i>
+                                <span className="text">{item.title}</span>
+                            </Link>
+                            {item.submenu && (
+                                <div
+                                    className={`submenu${activeSubMenu === item.title ? " active" : ""}`}
+                                >
+                                    {item.submenu.map((subItem, subIndex) => (
+                                        <Link
+                                            key={subIndex}
+                                            to={subItem.link}
+                                            className={subItem.link === pathname ? "active" : ""}
+                                        >
+                                            {subItem.title}
+                                        </Link>
+                                    ))}
+                                </div>
+                            )}
+                        </li>
+                    )
+                })}
             </ul>
         </nav>
-
     )
 }
 
